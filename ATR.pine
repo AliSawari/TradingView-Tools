@@ -1,0 +1,32 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © alisawari
+
+//@version=5
+indicator("ATR", overlay = true)
+ema = ta.ema(close, 200)
+atr = ta.atr(14)
+
+isUptrend = close > ema
+isDowntrend = close < ema
+
+multiplier = (1 * atr)
+
+everyCandle = 2
+
+var float SL = low - multiplier
+var float TP = close + multiplier
+
+isStep = bar_index % everyCandle == 0 ? true : false 
+
+
+if isUptrend and isStep
+    SL := close - multiplier
+    TP := close + multiplier
+if isDowntrend and isStep
+    SL := close + multiplier
+    TP := close - multiplier
+
+plot(SL, color = color.red)
+plot(TP, color = color.green)
+
+
